@@ -1,0 +1,61 @@
+---
+title: "Beat_AML"
+author: "Kendall Anderson"
+date: "12/16/2018"
+output: html_document
+---
+
+```{r}
+library(dplyr)
+library(tidyverse)
+library(ggplot2)
+```
+
+```{r}
+beat_clinical <- read.csv("beat_clinical.csv", na.strings=c(""," "))
+```
+
+```{r}
+View(beat_clinical)
+```
+
+```{r}
+a <- list((grep("del(7)", beat_clinical$Karyotype, fixed=TRUE)))
+b <- list((grep("-7", beat_clinical$Karyotype, fixed=TRUE)))
+```
+
+```{r}
+a <- data.frame(a)
+b <- data.frame(b)
+a$X <- a$c.28L..44L..116L..139L..172L..216L..242L..274L..276L..328L..383L..
+b$X <- b$c.72L..88L..113L..114L..119L..132L..133L..139L..151L..152L..158L..
+a <- subset(a, select = -c(c.28L..44L..116L..139L..172L..216L..242L..274L..276L..328L..383L..))
+b <- subset(b, select = -c(c.72L..88L..113L..114L..119L..132L..133L..139L..151L..152L..158L..))
+c <- rbind(a,b)
+```
+
+```{r}
+View(c)
+```
+
+```{r}
+beat_clinical$X <- seq(1, 672, by=1)
+```
+
+```{r}
+as.tibble(beat_clinical)
+```
+
+```{r}
+# merge dataframes to only include patients with 7del mutations
+seven_del_only <- merge(c, beat_clinical)
+```
+
+```{r}
+View(seven_del_only)
+```
+
+```{r}
+sum(seven_del_only$rnaSeq == "y")
+```
+
